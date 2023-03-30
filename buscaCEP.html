@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Formulário de Endereço</title>
+</head>
+<body>
+	<form>
+		<label for="cep">CEP:</label>
+		<input type="text" id="cep" name="cep">
+        <button type="button" onclick="buscaCEP()">Buscar CEP</button>
+        <br><br>
+
+        <label for="logradouro">Logradouro:</label>
+		<input type="text" id="logradouro" name="logradouro"><br><br>
+
+		<label for="numero">Número:</label>
+		<input type="number" id="numero" name="numero"><br><br>
+
+		<label for="complemento">Complemento:</label>
+		<input type="text" id="complemento" name="complemento"><br><br>
+
+		<label for="bairro">Bairro:</label>
+		<input type="text" id="bairro" name="bairro"><br><br>
+
+		<label for="cidade">Cidade:</label>
+		<input type="text" id="cidade" name="cidade"><br><br>
+
+		<label for="uf">UF:</label>
+		<select id="uf" name="uf">
+			<option value="AC">AC</option>
+			<option value="AL">AL</option>
+			<option value="AP">AP</option>
+			<option value="AM">AM</option>
+			<option value="BA">BA</option>
+			<option value="CE">CE</option>
+			<option value="DF">DF</option>
+			<option value="ES">ES</option>
+			<option value="GO">GO</option>
+			<option value="MA">MA</option>
+			<option value="MT">MT</option>
+			<option value="MS">MS</option>
+			<option value="MG">MG</option>
+			<option value="PA">PA</option>
+			<option value="PB">PB</option>
+			<option value="PR">PR</option>
+			<option value="PE">PE</option>
+			<option value="PI">PI</option>
+			<option value="RJ">RJ</option>
+			<option value="RN">RN</option>
+			<option value="RS">RS</option>
+			<option value="RO">RO</option>
+			<option value="RR">RR</option>
+			<option value="SC">SC</option>
+			<option value="SP">SP</option>
+			<option value="SE">SE</option>
+			<option value="TO">TO</option>
+		</select><br><br>
+
+		<button type="submit">Enviar</button>
+	</form>
+    <script>
+        const buscaCEP = async function() {
+            //Desabilita o botao
+            document.querySelector("button[type=button]").disabled = true;
+            //Obtem o CEP digitado
+            let cep = document.querySelector("#cep").value;
+            try {
+                //Obtem o endereço pelo CEP no formato JSON
+                let json = await (await fetch(`https://viacep.com.br/ws/${cep}/json/`)).json();
+                //Define os campos do endereço
+                if(json.logradouro !== undefined) {
+                    document.querySelector("#logradouro").value = json.logradouro;
+                    document.querySelector("#complemento").value = json.complemento;
+                    document.querySelector("#bairro").value = json.bairro;
+                    document.querySelector("#cidade").value = json.localidade;
+                    document.querySelector("#uf").value = json.uf;
+                } else {
+                    alert("CEP inexistente");
+                }
+            } catch(error) {
+                alert(error.message);
+            }
+            //Habilita o botao
+            document.querySelector("button[type=button]").disabled = false;
+        } 
+        
+    </script>
+</body>
+</html>
